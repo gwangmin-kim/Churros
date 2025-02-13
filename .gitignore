@@ -25,6 +25,9 @@
 
 # Visual Studio cache directory
 .vs/
+# VS Code cache directory
+*.vscode/
+*.vsconfig
 
 # Gradle cache directory
 .gradle/
@@ -74,6 +77,3 @@ crashlytics-build.properties
 
 # Mac .DS_Store
 *.DS_Store
-
-# vsconfig
-*.vsconfig

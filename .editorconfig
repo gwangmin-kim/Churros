@@ -1,0 +1,33 @@
+# Remove the line below if you want to inherit .editorconfig settings from higher directories
+root = true
+
+# C# files
+[*.cs]
+
+charset = utf-8
+
+# Indentation and spacing
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# New line preferences
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+
+# Naming Convention
+dotnet_naming_rule.camel_case_variables.symbols  = local_variable
+dotnet_naming_rule.camel_case_variables.style    = camel_case
+dotnet_naming_rule.camel_case_variables.severity = error
+
+dotnet_naming_symbols.local_variable.applicable_kinds = variable
+dotnet_naming_symbols.local_variable.applicable_accessibilities = internal, private
+
+dotnet_naming_rule.pascal_case_public.symbols  = public_variable
+dotnet_naming_rule.pascal_case_public.style    = pascal_case
+dotnet_naming_rule.pascal_case_public.severity = error
+
+dotnet_naming_symbols.public_variable.applicable_kinds = field
+dotnet_naming_symbols.public_variable.applicable_accessibilities = public
