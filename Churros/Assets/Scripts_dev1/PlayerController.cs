@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private float _moveDamping;
 	[SerializeField] private float _rotationDamping;
 
+	[Header("Interaction")]
+	[SerializeField] private float _interactionRange;
+
 	private void Start()
 	{
 		playerStatus = new PlayerStatus();
@@ -62,18 +65,35 @@ public class PlayerController : MonoBehaviour
 	// 입력된 방향으로 AdjustSpeed에서 결정된 속력에 따라 이동
 	private void Move()
 	{
+		// check collision
 		Vector3 direction = new Vector3(_moveInput2d.x, 0, _moveInput2d.y);
+		if (Physics.SphereCast(transform.position, 0.5f, direction, out RaycastHit hit, Time.deltaTime * _moveSpeed))
+		{
+			return;
+		}
 		transform.Translate(Time.deltaTime * _moveSpeed * direction, Space.World);
 	}
 
 	private void Interact()
 	{
-
+		// 상호작용 가능한 물체가 앞에 있는지 확인
+		RaycastHit hitInformation;
+		if (Physics.Raycast(transform.position, transform.forward, out hitInformation, _interactionRange))
+		{
+			IInteractable interactable = hitInformation.collider.GetComponent<IInteractable>();
+			if (interactable != null) 
+			{ 
+				interactable.Interact(playerStatus);
+			}
+		}
 	}
 
 	private void Attack()
 	{
-
+		if (playerStatus.holdingCount != 0) 
+		{
+			return;
+		}
 	}
 
 	// Process Input
@@ -114,13 +134,42 @@ public class PlayerStatus
 {
 	public bool isPlaying;
 	public bool isMoving;
-	public bool isHolding;
+	public int holdingCount;
+	public int maximumHoldingCount; // not used yet
+	private Item _itemHolded;
 
 	public PlayerStatus()
 	{
 		isPlaying = false;
 		isMoving = false;
-		isHolding = false;
+		holdingCount = 0;
+		_itemHolded = null;
+	}
+
+	public void GetItem(Item item)
+	{
+		if (_itemHolded != null && _itemHolded.id != item.id)
+		{
+			Debug.Log("cannot get item: already holding something else");
+			return;
+		}
+		holdingCount++;
+		if (_itemHolded == null)
+		{
+			_itemHolded = item;
+		}
+		//Debug.Log($"Now Holding: {item}");
+	}
+
+	public Item PutItem()
+	{
+		if(holdingCount == 0)
+		{
+			Debug.Log("cannot put item: holding nothing");
+			return null;
+		}
+		holdingCount--;
+		return _itemHolded;
 	}
 }
 
