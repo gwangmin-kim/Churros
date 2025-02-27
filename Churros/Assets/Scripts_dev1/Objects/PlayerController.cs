@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 	
 	private Vector2 _moveInput2d;
 	private float _moveSpeed;
-
+	
 	[Header("Movement")]
 	[SerializeField] private float _maxSpeed;
 	[SerializeField] private float _moveDamping;
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Interact()
 	{
-		Debug.Log("Interact Called");
+		Debug.Log("Interact called");
 
 		// 상호작용 가능한 물체가 앞에 있는지 확인
 		RaycastHit hitInformation;
@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Attack()
 	{
-		Debug.Log("Attack Called");
+		Debug.Log("Attack called");
 
 		// 무언가를 들고 있으면 공격할 수 없음
 		if (_playerStatus.IsHolding())
@@ -107,11 +107,13 @@ public class PlayerController : MonoBehaviour
 		switch (context.phase)
 		{
 			case InputActionPhase.Performed:
+				//Debug.Log("Move performed");
 				_playerStatus.isMoving = true;
 				_moveInput2d = context.ReadValue<Vector2>();
 				break;
 
 			case InputActionPhase.Canceled:
+				//Debug.Log("Move canceled");
 				_playerStatus.isMoving = false;
 				_moveInput2d = Vector2.zero;
 				break;
@@ -122,7 +124,6 @@ public class PlayerController : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			// Debug.Log("performed");
 			Interact();
 		}
 	}
@@ -131,7 +132,6 @@ public class PlayerController : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			// Debug.Log("performed");
 			Attack();
 		}
 	}
@@ -139,13 +139,11 @@ public class PlayerController : MonoBehaviour
 
 public class PlayerStatus
 {
-	public bool isPlaying;
-	public bool isMoving;
+	public bool isMoving = false;
 	private PlayerItemQueue _playerItemQueue;
 
 	public PlayerStatus()
 	{
-		isPlaying = false;
 		isMoving = false;
 		_playerItemQueue = new PlayerItemQueue(1);
 	}
@@ -176,7 +174,7 @@ public class PlayerStatus
 // 플레이어가 들고 있는 아이템을 큐에 저장
 public class PlayerItemQueue
 {
-	private int _maxSize;
+	private static int _maxSize;
 	private Queue<Item> _itemQueue;
 
 	public PlayerItemQueue(int size)

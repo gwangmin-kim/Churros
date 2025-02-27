@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class Container : MonoBehaviour, IContainer
+public class Container : ObjectController
 {
-	private Item _item;
+	//private Item _item;
 
-	public void Interact(PlayerStatus playerStatus)
-	{
-		playerStatus.Get(TakeOut());
-	}
+	//public void Interact(PlayerStatus playerStatus)
+	//{
+	//	playerStatus.Get(TakeOut());
+	//}
 
-	public Item TakeOut()
-	{
-		return new Item(_item);
-	}
+	//public Item TakeOut()
+	//{
+	//	return new Item(_item);
+	//}
 }

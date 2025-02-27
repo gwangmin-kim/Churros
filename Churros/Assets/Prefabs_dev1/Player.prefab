@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 4972389333269508964}
   - component: {fileID: 1496228031754149912}
   - component: {fileID: 7003523308795146054}
-  - component: {fileID: 6734780020124349928}
+  - component: {fileID: 1860014175146495455}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6734780020124349928
+--- !u!114 &1860014175146495455
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
   _maxSpeed: 10
   _moveDamping: 5
   _rotationDamping: 10
-  _interactionRange: 0
+  _interactionRange: 1
 --- !u!1 &1960660124125518021
 GameObject:
   m_ObjectHideFlags: 0
