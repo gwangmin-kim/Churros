@@ -42,10 +42,10 @@ public class TileMap : MonoBehaviour
 		return adjustedCoordinate;
 	}
 
-	// 길이를 받아 타일 몇 개 길이에 가장 가까운지 계산
+	// 길이를 받아 타일 간격의 배수에 맞취 반올림
 	private static float CalculateLengthByTile(float length)
 	{
-		return Mathf.RoundToInt(length / tileInterval);
+		return Mathf.RoundToInt(length / tileInterval) * tileInterval;
 	}
 
 	// 크기에 따라 타일맵에서 보정할 좌표값 계산
