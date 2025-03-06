@@ -42,7 +42,18 @@ public class StoreManagerReal : MonoBehaviour
 
         for (int i = startIndex; i < endIndex; i++)
         {
+            //Instantiate(A, B) => A를 B에 복제한다. 아이템 프리팹을 판넬에 복제
+            GameObject newItem = Instantiate(itemPrefeb, itemPanel);
+            //프리팹의 요소들을 변수에 저장 (이름, 가격, 아이콘, 버튼 순)
+            TextMeshProUGUI itemNameText = newItem.transform.Find("ItemName").GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI itemPriceText = newItem.transform.Find("BuyButton/ItemPrice").GetComponent<TextMeshProUGUI>();
+            Image itemIconImage = newItem.transform.Find("ItemIcon").GetComponent<Image>();
+            Button butButton = newItem.transform.Find("BuyButton").GetComponent<Button>();
 
+            itemNameText.text =
+
+
+            
         }
     }
 
