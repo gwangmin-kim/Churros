@@ -16,3 +16,4 @@ MonoBehaviour:
   itemIcon: {fileID: 0}
   price: 1000
   category: food
+  originalstock: 4

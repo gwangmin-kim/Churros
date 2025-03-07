@@ -3,15 +3,12 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-
-public class StoreManager : MonoBehaviour
+using System.Runtime.CompilerServices;
+public class InventoryManger : MonoBehaviour
 {
-
-    [SerializeField] private GameObject _itemPrefeb;
-    [SerializeField] private GameObject _storePanel;
+    [SerializeField] private GameObject _ivenPrefeb;
+    [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private Transform _itemPanel;
-    
-    // 좌우 페이지 넘김 버튼
     [SerializeField] private Button _rightPageButton, _leftPageButton;
     // 카테고리 분류 버튼
     [SerializeField] private Button _categoryFirstButton, _categorySecondButton, _categoryThirdButton;
@@ -22,7 +19,9 @@ public class StoreManager : MonoBehaviour
     // 카테고리에 따라 분류한 아이템
     [SerializeField] private List<StoreItem> _filteredItems;
 
-    // 상점 한 페이지에 표시될 최대 아이템 개수
+    [SerializeField] private List<StoreItem> _myItems;
+
+     // 상점 한 페이지에 표시될 최대 아이템 개수
     private int _maxItemPerPage = 4;
     // 현재 페이지
     private int _currentPage = 0;
@@ -41,15 +40,18 @@ public class StoreManager : MonoBehaviour
         FilterItems("drink");
         
     }
-
-    // 이전 페이지로 넘어가는 함수
-    private void PreviousPage()
+	public void OpenInventory()
+    {
+        UpdateInventoryUI();
+    }
+	// 이전 페이지로 넘어가는 함수
+	private void PreviousPage()
     {
         // 페이지가 가장 앞일 경우 실행 X
         if(_currentPage > 0)
         {
             _currentPage--;
-            UpdateStoreUI();
+            UpdateInventoryUI();
         }
     }
 
@@ -57,10 +59,10 @@ public class StoreManager : MonoBehaviour
     private void NextPage()
     {
         // 다음 페이지가 존재하지 않을 경우 실행 X
-        if((_currentPage + 1) * _maxItemPerPage < _filteredItems.Count)
+        if((_currentPage + 1) * _maxItemPerPage < _myItems.Count)
         {
             _currentPage++;
-            UpdateStoreUI();
+            UpdateInventoryUI();
         }
     }
 
@@ -71,17 +73,19 @@ public class StoreManager : MonoBehaviour
         _filteredItems = _allItems.FindAll(item => item.category == category);
 
         _currentPage = 0;
-        UpdateStoreUI();
+        UpdateInventoryUI();
     }
     
     // (카테고리 변경 및 처음 시작 시) 상점 UI 업데이트
-    private void UpdateStoreUI()
+    private void UpdateInventoryUI()
     {
-        Debug.Log("UpdateStoreUI() 실행");
+        _myItems = _filteredItems.FindAll(item => item.mystock > 0);
+
+        Debug.Log("UpdateInventoryUI() 실행");
         // 시작 인덱스
         int startIndex = _currentPage * _maxItemPerPage;
         // 끝 인덱스 (아이템 개수가 4개보다 적게 남은경우 적은걸 선택)
-        int endIndex = Mathf.Min(startIndex + _maxItemPerPage, _filteredItems.Count);
+        int endIndex = Mathf.Min(startIndex + _maxItemPerPage, _myItems.Count);
 
         // 판넬 초기화 (이전 카테고리 상품 제거)
         foreach (Transform before in _itemPanel)
@@ -92,27 +96,23 @@ public class StoreManager : MonoBehaviour
         for (int i = startIndex; i < endIndex; i++)
         {
             //Instantiate(A, B) => A를 B에 복제한다. 아이템 프리팹을 판넬에 복제
-            GameObject newItem = Instantiate(_itemPrefeb, _itemPanel);
+            GameObject newItem = Instantiate(_ivenPrefeb, _itemPanel);
             //프리팹의 요소들을 변수로 생성 (이름, 가격, 아이콘, 버튼 순)
             TextMeshProUGUI itemNameText = newItem.transform.Find("ItemName").GetComponent<TextMeshProUGUI>();
-            TextMeshProUGUI itemPriceText = newItem.transform.Find("BuyButton/ItemPrice").GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI itemPriceText = newItem.transform.Find("SellButton/ItemPrice").GetComponent<TextMeshProUGUI>();
             TextMeshProUGUI itemStock = newItem.transform.Find("ItemStock").GetComponent<TextMeshProUGUI>();
             Image itemIconImage = newItem.transform.Find("ItemIcon").GetComponent<Image>();
-            Button buyButton = newItem.transform.Find("BuyButton").GetComponent<Button>();
+            Button sellButton = newItem.transform.Find("SellButton").GetComponent<Button>();
             
 
             //프리팹의 요소들을 변수에 저장 (이름, 가격, 아이콘, 버튼 순)
-            itemNameText.text = _filteredItems[i].itemName;
-            itemPriceText.text = _filteredItems[i].price.ToString();
-            itemStock.text = _filteredItems[i].stock.ToString();
-            if(_filteredItems[i].stock <= 0)
-            {
-                buyButton.gameObject.SetActive(false);
-            }
-            itemIconImage.sprite = _filteredItems[i].itemIcon;
+            itemNameText.text = _myItems[i].itemName;
+            itemPriceText.text = _myItems[i].price.ToString();
+            itemStock.text = _myItems[i].mystock.ToString();
+            itemIconImage.sprite = _myItems[i].itemIcon;
             // i를 람다식에 직접 참조할 경우, 최종 값인 4가 들어가게 된다
             int index = i;
-            buyButton.onClick.AddListener(() => PurchaseItem(_filteredItems[index]));
+    
 
 
             
@@ -134,7 +134,7 @@ public class StoreManager : MonoBehaviour
                 item.mystock++;
             }
             // 재고량 업데이트를 위해서 UI업데이트
-            UpdateStoreUI();
+            UpdateInventoryUI();
         }
         else
         {
@@ -148,7 +148,10 @@ public class StoreManager : MonoBehaviour
     private void ExitStore()
     {
         Debug.Log("상점 창 종료");
-        _storePanel.SetActive(false);
+        _inventoryPanel.SetActive(false);
     }
+
+
+
 
 }

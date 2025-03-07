@@ -16,3 +16,4 @@ MonoBehaviour:
   itemIcon: {fileID: 0}
   price: 3000
   category: drink
+  originalstock: 3
