@@ -127,11 +127,9 @@ public class StoreManager : MonoBehaviour
         {
             Debug.Log($"아이템 구매 : {item.itemName}");
             // 구매 가능한 지 체크
-            bool result = PlayerMoneyManager.Instance.SpendMoney(item.price);
-            if (result)
+            if (PlayerMoneyManager.Instance.SpendMoney(item.price))
             {
-                item.stock--;
-                item.mystock++;
+                item.PurchaseStock();
             }
             // 재고량 업데이트를 위해서 UI업데이트
             UpdateStoreUI();

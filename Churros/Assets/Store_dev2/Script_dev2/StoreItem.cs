@@ -22,5 +22,11 @@ public class StoreItem : ScriptableObject
         stock = originalstock;
         Debug.Log($"기존 재고값 : {originalstock}, 현재 재고량 : {stock}");
     }
-    
+
+    // 아이템을 구매했을 때 재고를 관리해주는 함수    
+    public void PurchaseStock()
+    {
+        stock--;
+        mystock++;
+    }
 }
